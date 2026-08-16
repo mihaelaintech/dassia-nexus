@@ -22,16 +22,6 @@ No functional changes have been made to the application after this freeze point.
 
 ---
 
-## Repository Structure
-Dassia/
-├── Backend/                    Flask API, models, routes
-│   ├── app.py                  Application entry point
-│   ├── requirements.txt        Python dependencies
-│   └── .env.example            Template for environment variables
-└── Frontend/
-    └── dassia-frontend/        Angular application
----
-
 ## Prerequisites
 
 - Python 3.10 or later

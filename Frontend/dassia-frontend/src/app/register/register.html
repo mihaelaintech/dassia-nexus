@@ -1,0 +1,72 @@
+<div class="login-page">
+  <div class="login-card">
+    <img class="logo" src="logo.png" alt="Dassia Nexus" />
+
+    <h2>CREATE YOUR ACCOUNT</h2>
+    <p class="portal-label">
+      {{ role === 'mentor' ? 'Mentor Portal' : role === 'manager' ? 'Staff Portal' : role === 'complaints' ? 'Complaints Portal' : 'Student Portal' }}
+    </p>
+    <p class="subtitle">Fill in your details to sign up.</p>
+
+    <form (ngSubmit)="onSubmit()" #registerForm="ngForm">
+      <label for="name">Full name</label>
+      <input
+        id="name"
+        name="name"
+        type="text"
+        [(ngModel)]="name"
+        required
+        autocomplete="name"
+      />
+
+      <label for="email">Email</label>
+      <input
+        id="email"
+        name="email"
+        type="email"
+        [(ngModel)]="email"
+        required
+        autocomplete="email"
+      />
+
+      <label for="password">Password</label>
+      <input
+        id="password"
+        name="password"
+        type="password"
+        [(ngModel)]="password"
+        required
+        autocomplete="new-password"
+      />
+
+      @if (!roleLocked) {
+        <label for="role">I am a</label>
+        <select id="role" name="role" [(ngModel)]="role" required>
+          <option value="student">Student</option>
+          <option value="mentor">Mentor</option>
+          <option value="manager">Staff</option>
+          <option value="complaints">Complaints</option>
+        </select>
+      }
+
+      @if (errorMessage()) {
+        <p class="error">{{ errorMessage() }}</p>
+      }
+
+      @if (successMessage()) {
+        <p class="success">{{ successMessage() }}</p>
+      }
+
+      <button type="submit" [disabled]="isLoading() || registerForm.invalid">
+        {{ isLoading() ? 'Creating account...' : 'Sign up' }}
+      </button>
+    </form>
+
+    <p class="footer-link">
+      Already have an account? <a routerLink="/login" [queryParams]="{ role: role }">Log in here</a>
+    </p>
+    <p class="footer-link">
+      <a routerLink="/portal-select">Back to portal selection</a>
+    </p>
+  </div>
+</div>

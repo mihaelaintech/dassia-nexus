@@ -1,0 +1,157 @@
+<h1>Manager Dashboard</h1>
+
+<div class="card" style="margin-bottom: 24px;">
+  <h2>Pending Mentor Approvals</h2>
+
+  @if (pendingUsers().length === 0) {
+    <p style="color: var(--text-secondary);">No mentor accounts awaiting approval.</p>
+  }
+
+  @for (pending of pendingUsers(); track pending.id) {
+    <div class="card" style="margin-bottom: 12px;">
+      <strong>{{ pending.name }}</strong> — {{ pending.email }}
+      @if (pending.mentor_id) {
+        <a [routerLink]="['/mentor', pending.mentor_id, 'profile']" style="margin-left: 8px;">View Full Profile</a>
+      }
+
+      @if (pending.documents.length === 0) {
+        <p style="color: var(--text-secondary); font-size: 13px;">No documents uploaded.</p>
+      } @else {
+        <ul style="margin: 8px 0;">
+          @for (doc of pending.documents; track doc.id) {
+            <li>
+              <a [href]="documentDownloadUrl(doc.id)" target="_blank">{{ doc.original_filename }}</a>
+            </li>
+          }
+        </ul>
+      }
+
+      <div style="margin: 8px 0;">
+        <strong>Interview:</strong> {{ pending.interview_status || 'Not Scheduled' }}
+        @if (pending.interview_scheduled_at) {
+          — {{ pending.interview_scheduled_at }}
+        }
+      </div>
+
+      @if (pending.interview_status !== 'Completed') {
+        <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 12px;">
+          <input
+            type="datetime-local"
+            [(ngModel)]="interviewDateInputs[pending.id]"
+            [name]="'interview-' + pending.id"
+            style="width: auto; margin-top: 0;"
+          />
+          <button class="btn btn-outline" (click)="scheduleInterview(pending.id)">Schedule Interview</button>
+          @if (pending.interview_status === 'Scheduled') {
+            <button class="btn btn-outline" (click)="completeInterview(pending.id)">Mark Completed</button>
+          }
+        </div>
+      }
+
+      <div style="display: flex; gap: 8px;">
+        <button
+          class="btn btn-primary"
+          (click)="approve(pending.id)"
+          [disabled]="pending.interview_status !== 'Completed'"
+        >
+          Approve
+        </button>
+        <button class="btn btn-danger" (click)="reject(pending.id)">Reject</button>
+      </div>
+    </div>
+  }
+</div>
+
+@if (loadError()) {
+  <p class="error card" style="margin-bottom: 24px;">{{ loadError() }}</p>
+}
+
+<div class="card" style="margin-bottom: 24px;">
+  <h2>Complaints</h2>
+  <p style="color: var(--text-secondary); margin-top: -8px;">All complaints submitted by students and mentors.</p>
+
+  <div class="stat-grid" style="margin-top: 16px;">
+    <div class="stat-card">
+      <div class="stat-icon tint-teal">&#9993;</div>
+      <div class="stat-number">{{ complaints().length }}</div>
+      <div class="stat-label">Total Complaints</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon tint-warning">&#9203;</div>
+      <div class="stat-number">{{ openComplaintsCount() }}</div>
+      <div class="stat-label">Open</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon tint-success">&#10003;</div>
+      <div class="stat-number">{{ resolvedComplaintsCount() }}</div>
+      <div class="stat-label">Resolved</div>
+    </div>
+  </div>
+
+  <div style="display: flex; gap: 8px; margin-bottom: 16px;">
+    <button
+      [class]="complaintFilter() === 'all' ? 'btn btn-navy' : 'btn btn-outline'"
+      (click)="setComplaintFilter('all')"
+    >
+      All
+    </button>
+    <button
+      [class]="complaintFilter() === 'open' ? 'btn btn-navy' : 'btn btn-outline'"
+      (click)="setComplaintFilter('open')"
+    >
+      Open
+    </button>
+    <button
+      [class]="complaintFilter() === 'resolved' ? 'btn btn-navy' : 'btn btn-outline'"
+      (click)="setComplaintFilter('resolved')"
+    >
+      Resolved
+    </button>
+  </div>
+
+  @if (filteredComplaints().length === 0) {
+    <p style="color: var(--text-secondary);">No complaints match this filter.</p>
+  }
+
+  @for (complaint of filteredComplaints(); track complaint.id) {
+    <div class="card" style="margin-bottom: 12px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+        <strong>{{ complaint.subject }}</strong>
+        <span [class]="complaint.status === 'Resolved' ? 'badge badge-resolved' : 'badge badge-open'">
+          {{ complaint.status }}
+        </span>
+      </div>
+      <p style="color: var(--text-secondary); font-size: 13px; margin: 0 0 6px 0;">
+        Submitted by {{ complaint.submitted_by_name }} ({{ complaint.submitted_by_role }}) &middot; {{ formatDate(complaint.created_at) }}
+      </p>
+      <p style="margin: 0 0 12px 0;">{{ complaint.description }}</p>
+      @if (complaint.status !== 'Resolved') {
+        <button class="btn btn-outline" (click)="markComplaintResolved(complaint.id)">Mark Resolved</button>
+      }
+    </div>
+  }
+</div>
+
+<div class="card">
+  <h2>All Feedback Requests</h2>
+  <p style="color: var(--text-secondary); margin-top: -8px;">All feedback requests across the platform.</p>
+
+  @if (requests().length === 0) {
+    <p style="color: var(--text-secondary);">No feedback requests found.</p>
+  }
+
+  <div class="request-list">
+    @for (request of requests(); track request.id) {
+      <div class="card request-item">
+        <strong>{{ request.title }}</strong><br />
+        Student: {{ request.student_name }}<br />
+        Mentor: {{ request.mentor_name }}<br />
+        Status: {{ request.status }}<br />
+        Description: {{ request.description }}<br />
+        <a [routerLink]="['/request', request.id]">
+          <button class="btn btn-outline" style="margin-top: 8px;">View Details</button>
+        </a>
+      </div>
+    }
+  </div>
+</div>

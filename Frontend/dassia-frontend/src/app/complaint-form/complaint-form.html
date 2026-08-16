@@ -1,0 +1,20 @@
+<section class="complaint-form-card">
+  <h2>Submit a Complaint</h2>
+
+  <label for="complaint-subject">Subject</label>
+  <input id="complaint-subject" type="text" [(ngModel)]="subject" name="subject" />
+
+  <label for="complaint-description">Description</label>
+  <textarea id="complaint-description" rows="3" [(ngModel)]="description" name="description"></textarea>
+
+  @if (errorMessage()) {
+    <p class="error">{{ errorMessage() }}</p>
+  }
+  @if (successMessage()) {
+    <p class="success">{{ successMessage() }}</p>
+  }
+
+  <button (click)="submit()" [disabled]="isSubmitting() || !subject.trim() || !description.trim()">
+    {{ isSubmitting() ? 'Submitting...' : 'Submit Complaint' }}
+  </button>
+</section>

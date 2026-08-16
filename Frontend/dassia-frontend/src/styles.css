@@ -1,0 +1,275 @@
+/* ============================================================
+   Dassia Nexus — global design system
+   ============================================================ */
+
+:root {
+  --navy: #0a2540;
+  --navy-light: #123a63;
+  --teal: #17747f;
+  --teal-dark: #14646f;
+  --teal-soft: #e6f3f4;
+
+  --bg-page: #f4f6f9;
+  --bg-card: #ffffff;
+  --border: #e5e9ef;
+  --border-input: #868fa0;
+
+  --text-primary: #0a2540;
+  --text-secondary: #64748b;
+  --text-muted: #67717f;
+
+  --success: #0a7a3d;
+  --success-bg: #e7f7ee;
+  --warning: #b45309;
+  --warning-bg: #fef3e2;
+  --danger: #b00020;
+  --danger-bg: #fdecec;
+  --info: #2563eb;
+  --info-bg: #eaf1fe;
+
+  --radius: 10px;
+  --radius-sm: 6px;
+  --shadow-card: 0 1px 3px rgba(10, 37, 64, 0.06), 0 1px 2px rgba(10, 37, 64, 0.04);
+  --shadow-hover: 0 6px 20px rgba(10, 37, 64, 0.10);
+
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg-page);
+  color: var(--text-primary);
+  font-family: inherit;
+}
+
+h1, h2, h3, h4 {
+  color: var(--navy);
+  font-weight: 700;
+  margin: 0 0 12px 0;
+}
+
+h1 { font-size: 24px; }
+h2 { font-size: 18px; }
+h3 { font-size: 15px; }
+
+a { color: var(--teal); }
+
+/* ---------- Focus (keyboard visibility) ---------- */
+
+.btn:focus-visible,
+a:focus-visible,
+.card-hover:focus-visible {
+  outline: 2px solid var(--navy);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* ---------- Layout shell ---------- */
+
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+}
+
+.app-main {
+  flex: 1;
+  min-width: 0;
+  padding: 28px 32px 48px;
+}
+
+/* ---------- Buttons ---------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 9px 16px;
+  border-radius: var(--radius-sm);
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background-color 0.15s ease, opacity 0.15s ease;
+}
+
+.btn-primary {
+  background: var(--teal);
+  color: #ffffff;
+}
+.btn-primary:hover:not(:disabled) { background: var(--teal-dark); }
+
+.btn-navy {
+  background: var(--navy);
+  color: #ffffff;
+}
+.btn-navy:hover:not(:disabled) { background: var(--navy-light); }
+
+.btn-outline {
+  background: transparent;
+  color: var(--teal);
+  border: 1px solid var(--teal);
+}
+.btn-outline:hover:not(:disabled) { background: var(--teal-soft); }
+
+.btn-danger {
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+.btn-danger:hover:not(:disabled) { background: #f9d6d9; }
+
+.btn:disabled { cursor: not-allowed; opacity: 0.55; }
+
+/* ---------- Cards ---------- */
+
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+  padding: 20px 22px;
+}
+
+.card-hover {
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+.card-hover:hover {
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-2px);
+}
+
+/* ---------- Stat cards (dashboard summary row) ---------- */
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.stat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+  padding: 18px 20px;
+}
+
+.stat-card .stat-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  margin-bottom: 12px;
+}
+
+.stat-card .stat-number {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--navy);
+  line-height: 1;
+}
+
+.stat-card .stat-label {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+.tint-teal   { background: var(--teal-soft); color: var(--teal-dark); }
+.tint-info   { background: var(--info-bg);   color: var(--info); }
+.tint-success{ background: var(--success-bg);color: var(--success); }
+.tint-warning{ background: var(--warning-bg);color: var(--warning); }
+
+/* ---------- Badges (status pills) ---------- */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.badge-pending   { background: var(--warning-bg); color: var(--warning); }
+.badge-progress  { background: var(--info-bg);    color: var(--info); }
+.badge-completed { background: var(--success-bg); color: var(--success); }
+.badge-verified  { background: var(--success-bg); color: var(--success); }
+.badge-unverified{ background: var(--border);      color: #475569; }
+.badge-resolved  { background: var(--success-bg); color: var(--success); }
+.badge-open      { background: var(--warning-bg); color: var(--warning); }
+
+/* ---------- Forms ---------- */
+
+label {
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--navy);
+  display: block;
+  margin-top: 12px;
+  margin-bottom: 4px;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1px solid var(--border-input);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-family: inherit;
+  background: #ffffff;
+  color: var(--text-primary);
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--teal);
+  box-shadow: 0 0 0 3px var(--teal-soft);
+}
+
+.error { color: var(--danger); font-size: 13px; margin-top: 8px; }
+.success { color: var(--success); font-size: 13px; margin-top: 8px; }
+
+/* ---------- Section heading with action ---------- */
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 768px) {
+  .app-shell {
+    flex-direction: column;
+  }
+
+  .app-main {
+    padding: 20px 16px 40px;
+  }
+
+  h1 { font-size: 21px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+  .card-hover:hover {
+    transform: none;
+  }
+}

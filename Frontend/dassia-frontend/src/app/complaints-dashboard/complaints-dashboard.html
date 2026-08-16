@@ -1,0 +1,49 @@
+<h1>Complaints Dashboard</h1>
+
+@if (errorMessage()) {
+  <p class="error card" style="margin-bottom: 24px;">{{ errorMessage() }}</p>
+}
+
+<div class="stat-grid">
+  <div class="stat-card">
+    <div class="stat-icon tint-teal">&#9993;</div>
+    <div class="stat-number">{{ complaints().length }}</div>
+    <div class="stat-label">Total Complaints</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon tint-warning">&#9203;</div>
+    <div class="stat-number">{{ openCount() }}</div>
+    <div class="stat-label">Open</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon tint-success">&#10003;</div>
+    <div class="stat-number">{{ resolvedCount() }}</div>
+    <div class="stat-label">Resolved</div>
+  </div>
+</div>
+
+@if (complaints().length === 0) {
+  <p class="card" style="color: var(--text-secondary);">No complaints submitted.</p>
+}
+
+<div class="request-list">
+  @for (c of complaints(); track c.id) {
+    <div class="card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+        <strong>{{ c.subject }}</strong>
+        <span [class]="c.status === 'Resolved' ? 'badge badge-resolved' : 'badge badge-open'">
+          {{ c.status }}
+        </span>
+      </div>
+      <p style="color: var(--text-secondary); font-size: 13px; margin: 0 0 6px 0;">
+        From {{ c.submitted_by_name }} ({{ c.submitted_by_role }}) &middot; {{ formatDate(c.created_at) }}
+      </p>
+      <p style="margin: 0 0 12px 0;">{{ c.description }}</p>
+      @if (c.status === 'Open') {
+        <button class="btn btn-outline" (click)="resolve(c.id)">Mark Resolved</button>
+      } @else {
+        <button class="btn btn-outline" (click)="reopen(c.id)">Reopen</button>
+      }
+    </div>
+  }
+</div>

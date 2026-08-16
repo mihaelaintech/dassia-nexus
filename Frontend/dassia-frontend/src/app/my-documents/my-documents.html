@@ -1,0 +1,27 @@
+<section class="my-documents">
+  <h2>My Documents</h2>
+
+  @if (errorMessage()) {
+    <p class="error">{{ errorMessage() }}</p>
+  }
+
+  <div class="upload-row">
+    <input type="file" (change)="onFileSelected($event)" accept=".pdf,.doc,.docx,.png,.jpg,.jpeg" />
+    <button (click)="upload()" [disabled]="!selectedFile || isUploading()">
+      {{ isUploading() ? 'Uploading...' : 'Upload' }}
+    </button>
+  </div>
+
+  @if (documents().length === 0) {
+    <p>No documents uploaded yet.</p>
+  }
+
+  <ul>
+    @for (doc of documents(); track doc.id) {
+      <li>
+        <a [href]="downloadUrl(doc.id)" target="_blank">{{ doc.original_filename }}</a>
+        <button class="danger" (click)="delete(doc.id)">Delete</button>
+      </li>
+    }
+  </ul>
+</section>

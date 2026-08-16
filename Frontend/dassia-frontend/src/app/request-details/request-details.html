@@ -1,0 +1,94 @@
+<a class="btn btn-outline" style="margin-bottom: 16px; display: inline-flex;" (click)="goBackToDashboard()">&larr; Back to Dashboard</a>
+
+@if (isLoading()) {
+  <p class="card" style="color: var(--text-secondary);">Loading...</p>
+}
+
+@if (errorMessage()) {
+  <p class="error card" style="margin-bottom: 16px;">{{ errorMessage() }}</p>
+}
+
+@if (requestData(); as request) {
+  <div class="card" style="margin-bottom: 24px;">
+    <h1>{{ request.title }}</h1>
+
+    <p><strong>Student:</strong> {{ request.student_name }}</p>
+    <p><strong>Mentor:</strong> {{ request.mentor_name }}</p>
+    <p>
+      <strong>Status:</strong>
+      <span class="badge badge-progress">{{ request.status }}</span>
+    </p>
+
+    <p>{{ request.description }}</p>
+
+    @if (!isManager && nextStatus) {
+      <button class="btn btn-primary" (click)="advanceStatus()" [disabled]="isUpdatingStatus()">
+        Move to {{ nextStatus }}
+      </button>
+    }
+
+    @if (isManager) {
+      <div style="display: flex; align-items: center; gap: 12px; margin-top: 16px;">
+        <label for="status-select" style="margin: 0;">Set status</label>
+        <select
+          id="status-select"
+          [ngModel]="request.status"
+          (ngModelChange)="setStatus($event)"
+          [disabled]="isUpdatingStatus()"
+          style="width: auto;"
+        >
+          @for (status of allStatuses; track status) {
+            <option [value]="status">{{ status }}</option>
+          }
+        </select>
+
+        <button class="btn btn-danger" (click)="deleteRequest()" [disabled]="isDeletingRequest()">
+          {{ isDeletingRequest() ? 'Deleting...' : 'Delete Request' }}
+        </button>
+      </div>
+    }
+  </div>
+
+  <div class="card">
+    <h2>Feedback Comments</h2>
+
+    <div class="request-list" style="margin-bottom: 20px;">
+      @for (comment of comments(); track comment.id) {
+        <div class="card" style="padding: 14px 18px;">
+          <p style="font-weight: 600; color: var(--navy); margin: 0 0 6px 0;">{{ comment.mentor_name }}</p>
+
+          @if (isManager && editingCommentId === comment.id) {
+            <textarea rows="2" [(ngModel)]="editingText"></textarea>
+            <div style="display: flex; gap: 8px; margin-top: 8px;">
+              <button class="btn btn-primary" (click)="saveEditComment(comment.id)">Save</button>
+              <button class="btn btn-outline" (click)="cancelEditComment()">Cancel</button>
+            </div>
+          } @else {
+            <p style="margin: 0 0 8px 0;">{{ comment.comment }}</p>
+            @if (isManager) {
+              <div style="display: flex; gap: 8px;">
+                <button class="btn btn-outline" (click)="startEditComment(comment)">Edit</button>
+                <button class="btn btn-danger" (click)="deleteComment(comment.id)">Delete</button>
+              </div>
+            }
+          }
+        </div>
+      }
+      @if (comments().length === 0) {
+        <p style="color: var(--text-secondary); font-size: 13px;">No comments yet.</p>
+      }
+    </div>
+
+    @if (!isManager) {
+      <h3>Add a Comment</h3>
+      <textarea
+        rows="3"
+        placeholder="Write feedback for the student..."
+        [(ngModel)]="newComment"
+      ></textarea>
+      <button class="btn btn-primary" style="margin-top: 10px;" (click)="submitComment()" [disabled]="isSubmittingComment() || !newComment.trim()">
+        {{ isSubmittingComment() ? 'Submitting...' : 'Submit Comment' }}
+      </button>
+    }
+  </div>
+}

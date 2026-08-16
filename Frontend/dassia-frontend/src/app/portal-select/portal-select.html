@@ -1,0 +1,26 @@
+<div class="login-page">
+  <div class="login-card">
+    <img class="logo" src="logo.png" alt="Dassia Nexus" />
+
+    <h2>ACCESS YOUR ACCOUNT</h2>
+    <p class="subtitle">Choose how you'd like to continue.</p>
+
+    <div class="portal-buttons">
+      <a class="portal-button" [routerLink]="['/login']" [queryParams]="{ role: 'student' }">
+        Student Login
+      </a>
+      <a class="portal-button" [routerLink]="['/login']" [queryParams]="{ role: 'mentor' }">
+        Mentor Login
+      </a>
+      <a class="portal-button" [routerLink]="['/login']" [queryParams]="{ role: 'manager' }">
+        Staff Login
+      </a>
+      <a class="portal-button" [routerLink]="['/register']" [queryParams]="{ role: 'student' }">
+        Student Registration
+      </a>
+      <a class="portal-button" [routerLink]="['/register']" [queryParams]="{ role: 'mentor' }">
+        Mentor Registration
+      </a>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,36 @@
+﻿# Environment
+.env
+*.env
+!.env.example
+
+# Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+.Python
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+instance/
+
+# Node / Angular
+node_modules/
+dist/
+.angular/
+npm-debug.log*
+
+# Editors / OS
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini
+
+# Uploaded files
+Backend/uploads/
+!Backend/uploads/.gitkeep
+
+# Stray archives
+*.zip

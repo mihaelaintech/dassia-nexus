@@ -1,0 +1,93 @@
+<h1>My Profile</h1>
+
+@if (errorMessage()) {
+  <p class="error card">{{ errorMessage() }}</p>
+}
+
+<div class="card" style="max-width: 560px; margin-bottom: 24px;">
+  <h2>Education & Bio</h2>
+
+  <label for="university">University</label>
+  <input id="university" name="university" type="text" [(ngModel)]="university" />
+
+  <label for="course">Course / Programme</label>
+  <input id="course" name="course" type="text" [(ngModel)]="course" />
+
+  <label for="yearOfStudy">Year of Study</label>
+  <input id="yearOfStudy" name="yearOfStudy" type="text" [(ngModel)]="yearOfStudy" placeholder="e.g. 2nd Year, MSc Year 1" />
+
+  <label for="bio">Bio</label>
+  <textarea id="bio" name="bio" rows="4" [(ngModel)]="bio" placeholder="Tell mentors a bit about yourself..."></textarea>
+
+  @if (basicsSaved()) {
+    <p class="success">Profile saved.</p>
+  }
+
+  <button class="btn btn-primary" style="margin-top: 16px;" (click)="saveBasics()" [disabled]="isSavingBasics()">
+    {{ isSavingBasics() ? 'Saving...' : 'Save' }}
+  </button>
+</div>
+
+<div class="card" style="max-width: 560px; margin-bottom: 24px;">
+  <h2>Skills</h2>
+
+  <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px;">
+    @for (skill of skills(); track skill.id) {
+      <span class="badge badge-progress" style="cursor: default;">
+        {{ skill.name }}
+        <button
+          (click)="deleteSkill(skill.id)"
+          style="background: none; border: none; color: inherit; cursor: pointer; margin-left: 6px; font-weight: 700;"
+          aria-label="Remove skill"
+        >&times;</button>
+      </span>
+    }
+    @if (skills().length === 0) {
+      <p style="color: var(--text-secondary); font-size: 13px; margin: 0;">No skills added yet.</p>
+    }
+  </div>
+
+  <div style="display: flex; gap: 8px;">
+    <input
+      type="text"
+      name="newSkillName"
+      [(ngModel)]="newSkillName"
+      placeholder="e.g. Python, Public Speaking"
+      style="margin-top: 0;"
+      (keydown.enter)="addSkill()"
+    />
+    <button class="btn btn-outline" (click)="addSkill()">Add</button>
+  </div>
+</div>
+
+<div class="card" style="max-width: 560px;">
+  <h2>Interests</h2>
+
+  <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px;">
+    @for (interest of interests(); track interest.id) {
+      <span class="badge badge-verified" style="cursor: default;">
+        {{ interest.name }}
+        <button
+          (click)="deleteInterest(interest.id)"
+          style="background: none; border: none; color: inherit; cursor: pointer; margin-left: 6px; font-weight: 700;"
+          aria-label="Remove interest"
+        >&times;</button>
+      </span>
+    }
+    @if (interests().length === 0) {
+      <p style="color: var(--text-secondary); font-size: 13px; margin: 0;">No interests added yet.</p>
+    }
+  </div>
+
+  <div style="display: flex; gap: 8px;">
+    <input
+      type="text"
+      name="newInterestName"
+      [(ngModel)]="newInterestName"
+      placeholder="e.g. AI Research, Career in Consulting"
+      style="margin-top: 0;"
+      (keydown.enter)="addInterest()"
+    />
+    <button class="btn btn-outline" (click)="addInterest()">Add</button>
+  </div>
+</div>

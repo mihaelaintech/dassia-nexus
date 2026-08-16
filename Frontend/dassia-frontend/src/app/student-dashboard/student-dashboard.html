@@ -1,0 +1,127 @@
+<h1>Dashboard Overview</h1>
+
+<div class="stat-grid">
+  <div class="stat-card">
+    <div class="stat-icon tint-teal" aria-hidden="true">✎</div>
+    <div class="stat-number">{{ feedbackRequests().length }}</div>
+    <div class="stat-label">Feedback Requests</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon tint-warning" aria-hidden="true">⏳</div>
+    <div class="stat-number">{{ pendingCount() }}</div>
+    <div class="stat-label">Pending</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon tint-info" aria-hidden="true">↻</div>
+    <div class="stat-number">{{ inProgressCount() }}</div>
+    <div class="stat-label">In Progress</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon tint-success" aria-hidden="true">✓</div>
+    <div class="stat-number">{{ completedCount() }}</div>
+    <div class="stat-label">Completed</div>
+  </div>
+</div>
+
+<div class="section-header">
+  <h2>Browse Mentors ({{ mentors().length }})</h2>
+  <button
+    class="btn btn-primary"
+    (click)="toggleRequestForm()"
+    [attr.aria-expanded]="showRequestForm()"
+    aria-controls="new-request-section"
+  >
+    {{ showRequestForm() ? 'Close' : '+ New Feedback Request' }}
+  </button>
+</div>
+
+@if (showRequestForm()) {
+  <section id="new-request-section" class="card" style="margin-bottom: 24px; max-width: 520px;">
+    <h3>New Feedback Request</h3>
+
+    <form (ngSubmit)="onSubmit()" #requestForm="ngForm">
+      <label for="mentor">Mentor</label>
+      <select id="mentor" name="mentor" [(ngModel)]="mentorId" required>
+        <option [ngValue]="null" disabled>Choose a mentor</option>
+        @for (mentor of mentors(); track mentor.id) {
+          <option [ngValue]="mentor.id">{{ mentor.name }}</option>
+        }
+      </select>
+
+      <label for="title">Title</label>
+      <input id="title" name="title" type="text" [(ngModel)]="title" required />
+
+      <label for="description">Description</label>
+      <textarea
+        id="description"
+        name="description"
+        rows="3"
+        [(ngModel)]="description"
+        required
+      ></textarea>
+
+      @if (formError()) {
+        <p class="error" role="alert">{{ formError() }}</p>
+      }
+      @if (formSuccess()) {
+        <p class="success" role="status">{{ formSuccess() }}</p>
+      }
+
+      <button
+        class="btn btn-primary"
+        style="margin-top: 16px;"
+        type="submit"
+        [disabled]="isSubmitting() || requestForm.invalid"
+      >
+        {{ isSubmitting() ? 'Submitting...' : 'Submit Request' }}
+      </button>
+    </form>
+  </section>
+}
+
+<div class="mentor-grid">
+  @for (mentor of mentors(); track mentor.id) {
+    <div class="card card-hover mentor-card">
+      <div class="mentor-card-top">
+        <div class="mentor-avatar" aria-hidden="true">{{ mentor.name.charAt(0) }}</div>
+        @if (mentor.verified) {
+          <span class="badge badge-verified">✓ Verified</span>
+        } @else {
+          <span class="badge badge-unverified">Pending verification</span>
+        }
+      </div>
+      <h3>{{ mentor.name }}</h3>
+      <p class="mentor-expertise">{{ mentor.expertise || 'General mentoring' }}</p>
+      <a class="btn btn-outline" style="width: 100%; margin-top: 10px;" [routerLink]="['/mentor', mentor.id, 'profile']">
+        View Profile
+      </a>
+    </div>
+  }
+</div>
+
+<h2 style="margin-top: 32px;">My Feedback Requests</h2>
+
+@if (feedbackRequests().length === 0) {
+  <p class="card" style="color: var(--text-secondary);">No feedback requests found.</p>
+}
+
+<div class="request-list">
+  @for (request of feedbackRequests(); track request.id) {
+    <div class="card request-item">
+      <div class="request-item-header">
+        <strong>{{ request.title }}</strong>
+        <span [class]="statusBadgeClass(request.status)">{{ request.status }}</span>
+      </div>
+      <p class="request-meta">Mentor: {{ request.mentor_name }}</p>
+      <p class="request-description">{{ request.description }}</p>
+    </div>
+  }
+</div>
+
+<div class="card" style="margin-top: 28px;">
+  <app-my-documents></app-my-documents>
+</div>
+
+<div class="card" style="margin-top: 20px;">
+  <app-complaint-form></app-complaint-form>
+</div>

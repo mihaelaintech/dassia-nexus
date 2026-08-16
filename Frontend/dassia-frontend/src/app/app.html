@@ -1,0 +1,38 @@
+﻿@if (auth.isLoggedIn()) {
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <img class="sidebar-logo" src="logo.png" alt="Dassia Nexus" />
+      </div>
+
+      <div class="sidebar-user">
+        <div class="sidebar-avatar">{{ initials() }}</div>
+        <div>
+          <div class="sidebar-user-name">{{ auth.currentUser()?.name }}</div>
+          <div class="sidebar-user-role">{{ roleLabel() }}</div>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <span class="sidebar-nav-label">Workspace</span>
+
+        @for (link of navLinks(); track link.path) {
+          <a class="sidebar-link" [routerLink]="[link.path]" routerLinkActive="active" [routerLinkActiveOptions]="activeOptions(link)">
+            <span class="sidebar-link-icon">{{ link.icon }}</span>
+            {{ link.label }}
+          </a>
+        }
+      </nav>
+
+      <button class="sidebar-logout" (click)="onLogout()">
+        Logout
+      </button>
+    </aside>
+
+    <main class="app-main">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+} @else {
+  <router-outlet></router-outlet>
+}

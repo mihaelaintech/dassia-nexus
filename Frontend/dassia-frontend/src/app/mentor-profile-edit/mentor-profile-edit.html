@@ -1,0 +1,132 @@
+<h1>My Mentor Profile</h1>
+
+@if (errorMessage()) {
+  <p class="error card">{{ errorMessage() }}</p>
+}
+
+@if (mentorId) {
+  <section class="card" style="max-width: 640px; margin-bottom: 24px;">
+    <h2>Basic Information</h2>
+
+    <label for="expertise">Specialization</label>
+    <input id="expertise" type="text" [(ngModel)]="expertise" name="expertise" />
+
+    <label for="bio">Bio</label>
+    <textarea id="bio" rows="2" [(ngModel)]="bio" name="bio"></textarea>
+
+    <label for="university">University</label>
+    <input id="university" type="text" [(ngModel)]="university" name="university" />
+
+    <label for="qualificationLevel">Qualification Level</label>
+    <input id="qualificationLevel" type="text" placeholder="e.g. Level 6, Bachelor's, Master's, PhD" [(ngModel)]="qualificationLevel" name="qualificationLevel" />
+
+    <label for="graduationYear">Graduation Year</label>
+    <input id="graduationYear" type="number" [(ngModel)]="graduationYear" name="graduationYear" />
+
+    <label for="personalStatement">Personal Statement</label>
+    <textarea id="personalStatement" rows="4" [(ngModel)]="personalStatement" name="personalStatement"></textarea>
+
+    <div style="display: flex; align-items: center; gap: 12px; margin-top: 16px;">
+      <button class="btn btn-primary" (click)="saveBasics()" [disabled]="isSavingBasics()">
+        {{ isSavingBasics() ? 'Saving...' : 'Save' }}
+      </button>
+      @if (basicsSaved()) {
+        <span class="success">Saved.</span>
+      }
+    </div>
+  </section>
+
+  <section class="card" style="max-width: 640px; margin-bottom: 24px;">
+    <h2>Qualifications &amp; Certifications</h2>
+
+    <div class="request-list" style="margin-bottom: 16px;">
+      @for (c of credentials(); track c.id) {
+        <div class="card" style="padding: 12px 16px; display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <span class="badge badge-progress">{{ c.type === 'qualification' ? 'Qualification' : 'Certification' }}</span>
+            <strong style="margin-left: 8px;">{{ c.name }}</strong>
+            @if (c.institution) { <span style="color: var(--text-secondary);"> — {{ c.institution }}</span> }
+            @if (c.year) { <span style="color: var(--text-secondary);"> ({{ c.year }})</span> }
+          </div>
+          <button class="btn btn-danger" (click)="deleteCredential(c.id)">Delete</button>
+        </div>
+      }
+      @if (credentials().length === 0) {
+        <p style="color: var(--text-secondary); font-size: 13px;">No qualifications or certifications added yet.</p>
+      }
+    </div>
+
+    <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: flex-end;">
+      <select [(ngModel)]="newCredentialType" name="newCredentialType" style="width: auto;">
+        <option value="qualification">Qualification</option>
+        <option value="certification">Certification</option>
+      </select>
+      <input type="text" placeholder="Name" [(ngModel)]="newCredentialName" name="newCredentialName" style="width: auto; margin-top: 0;" />
+      <input type="text" placeholder="Institution" [(ngModel)]="newCredentialInstitution" name="newCredentialInstitution" style="width: auto; margin-top: 0;" />
+      <input type="number" placeholder="Year" [(ngModel)]="newCredentialYear" name="newCredentialYear" style="width: 90px; margin-top: 0;" />
+      <button class="btn btn-outline" (click)="addCredential()">Add</button>
+    </div>
+  </section>
+
+  <section class="card" style="max-width: 640px; margin-bottom: 24px;">
+    <h2>Skills</h2>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px;">
+      @for (s of skills(); track s.id) {
+        <span class="badge badge-progress" style="cursor: default;">
+          {{ s.name }}
+          <button
+            (click)="deleteSkill(s.id)"
+            style="background: none; border: none; color: inherit; cursor: pointer; margin-left: 6px; font-weight: 700;"
+            aria-label="Remove skill"
+          >&times;</button>
+        </span>
+      }
+      @if (skills().length === 0) {
+        <p style="color: var(--text-secondary); font-size: 13px; margin: 0;">No skills added yet.</p>
+      }
+    </div>
+
+    <div style="display: flex; gap: 8px;">
+      <input type="text" placeholder="Skill name" [(ngModel)]="newSkillName" name="newSkillName" style="margin-top: 0;" (keydown.enter)="addSkill()" />
+      <button class="btn btn-outline" (click)="addSkill()">Add</button>
+    </div>
+  </section>
+
+  <section class="card" style="max-width: 640px;">
+    <h2>Work History (up to 3 jobs)</h2>
+
+    <div class="request-list" style="margin-bottom: 16px;">
+      @for (j of jobs(); track j.id) {
+        <div class="card" style="padding: 12px 16px; display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <strong>{{ j.job_title }}</strong> at {{ j.employer }}
+            <span style="color: var(--text-secondary);"> ({{ j.start_year }}–{{ j.is_current ? 'Present' : j.end_year }})</span>
+          </div>
+          <button class="btn btn-danger" (click)="deleteJob(j.id)">Delete</button>
+        </div>
+      }
+      @if (jobs().length === 0) {
+        <p style="color: var(--text-secondary); font-size: 13px;">No work history added yet.</p>
+      }
+    </div>
+
+    @if (jobs().length < 3) {
+      <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+        <input type="text" placeholder="Job title" [(ngModel)]="newJobTitle" name="newJobTitle" style="width: auto; margin-top: 0;" />
+        <input type="text" placeholder="Employer" [(ngModel)]="newJobEmployer" name="newJobEmployer" style="width: auto; margin-top: 0;" />
+        <input type="number" placeholder="Start year" [(ngModel)]="newJobStartYear" name="newJobStartYear" style="width: 110px; margin-top: 0;" />
+        @if (!newJobIsCurrent) {
+          <input type="number" placeholder="End year" [(ngModel)]="newJobEndYear" name="newJobEndYear" style="width: 100px; margin-top: 0;" />
+        }
+        <label style="display: flex; align-items: center; gap: 6px; font-weight: 500; margin: 0;">
+          <input type="checkbox" [(ngModel)]="newJobIsCurrent" name="newJobIsCurrent" style="width: auto;" />
+          Current job
+        </label>
+        <button class="btn btn-outline" (click)="addJob()">Add</button>
+      </div>
+    } @else {
+      <p style="color: var(--text-secondary); font-size: 13px;">You've listed the maximum of 3 jobs.</p>
+    }
+  </section>
+}

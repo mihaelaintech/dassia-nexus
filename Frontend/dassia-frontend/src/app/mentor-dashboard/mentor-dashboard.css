@@ -1,0 +1,16 @@
+.request-card {
+  border: 1px solid #cccccc;
+  padding: 16px;
+  margin-bottom: 16px;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+button {
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.error {
+  color: #b00020;
+}

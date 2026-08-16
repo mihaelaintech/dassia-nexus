@@ -1,0 +1,67 @@
+.my-documents {
+  border: 1px solid #cccccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  padding: 20px;
+  max-width: 480px;
+  margin-bottom: 24px;
+}
+
+.my-documents h2 {
+  margin-top: 0;
+}
+
+.upload-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.upload-row button {
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.upload-row button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.my-documents ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.my-documents li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.my-documents li a {
+  color: #1a7f8c;
+  text-decoration: none;
+}
+
+.my-documents li a:hover {
+  text-decoration: underline;
+}
+
+button.danger {
+  background-color: #b00020;
+  color: #ffffff;
+  border: none;
+  padding: 4px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.error {
+  color: #b00020;
+}

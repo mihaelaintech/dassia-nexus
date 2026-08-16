@@ -1,0 +1,48 @@
+<div class="login-page">
+  <div class="login-card">
+    <img class="logo" src="logo.png" alt="Dassia Nexus" />
+
+    <h1>ACCESS YOUR ACCOUNT</h1>
+    @if (portalLabel) {
+      <p class="portal-label">{{ portalLabel }}</p>
+    }
+    <p class="subtitle">Use your credentials to log in.</p>
+
+    <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
+      <label for="email">Email</label>
+      <input
+        id="email"
+        name="email"
+        type="email"
+        [(ngModel)]="email"
+        required
+        autocomplete="email"
+      />
+
+      <label for="password">Password</label>
+      <input
+        id="password"
+        name="password"
+        type="password"
+        [(ngModel)]="password"
+        required
+        autocomplete="current-password"
+      />
+
+      @if (errorMessage()) {
+        <p class="error" role="alert">{{ errorMessage() }}</p>
+      }
+
+      <button type="submit" [disabled]="isLoading() || loginForm.invalid">
+        {{ isLoading() ? 'Signing in...' : 'Log in' }}
+      </button>
+    </form>
+
+    <p class="footer-link">
+      Don't have an account? <a routerLink="/register" [queryParams]="{ role: expectedRole }">Sign up here</a>
+    </p>
+    <p class="footer-link">
+      <a routerLink="/portal-select">Back to portal selection</a>
+    </p>
+  </div>
+</div>

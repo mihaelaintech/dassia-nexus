@@ -1,0 +1,31 @@
+<h2>Mentor Dashboard</h2>
+
+<a routerLink="/my-profile"><button>Edit My Profile</button></a>
+
+<app-my-documents></app-my-documents>
+
+@if (loadError()) {
+  <p class="error">{{ loadError() }}</p>
+}
+
+<p>Number of requests: {{ assignedRequests().length }}</p>
+
+<p>Assigned feedback requests for this mentor.</p>
+
+<div *ngIf="assignedRequests().length === 0">
+  <p>No feedback requests assigned yet.</p>
+</div>
+
+<div *ngFor="let request of assignedRequests()" class="request-card">
+  <h3>{{ request.title }}</h3>
+
+  <p><strong>Student:</strong> {{ request.student_name }}</p>
+  <p><strong>Description:</strong> {{ request.description }}</p>
+  <p><strong>Status:</strong> {{ request.status }}</p>
+
+  <a [routerLink]="['/request', request.id]">
+    <button>View Details</button>
+  </a>
+</div>
+
+<app-complaint-form></app-complaint-form>

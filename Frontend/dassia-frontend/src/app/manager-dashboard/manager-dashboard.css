@@ -1,0 +1,102 @@
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+ul li {
+  border: 1px solid #cccccc;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+  background-color: #ffffff;
+}
+
+.error {
+  color: #b00020;
+}
+
+button {
+  margin-top: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.pending-card {
+  border: 1px solid #cccccc;
+  border-radius: 8px;
+  background-color: #fff8e1;
+  padding: 20px;
+  max-width: 640px;
+  margin-bottom: 24px;
+}
+
+.pending-card h2 {
+  margin-top: 0;
+}
+
+.pending-item {
+  border-bottom: 1px solid #e5c98a;
+  padding: 12px 0;
+}
+
+.pending-item:last-child {
+  border-bottom: none;
+}
+
+.no-docs {
+  color: #6b7280;
+  font-size: 13px;
+  margin: 4px 0;
+}
+
+.doc-list {
+  list-style: none;
+  padding: 0;
+  margin: 4px 0;
+}
+
+.doc-list li a {
+  color: #1a7f8c;
+  text-decoration: none;
+}
+
+.doc-list li a:hover {
+  text-decoration: underline;
+}
+
+.pending-actions {
+  margin-top: 8px;
+  display: flex;
+  gap: 8px;
+}
+
+.pending-actions button {
+  margin-top: 0;
+  padding: 6px 12px;
+  font-size: 13px;
+}
+
+button.danger {
+  background-color: #b00020;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+}
+.interview-row {
+  margin-top: 8px;
+  font-size: 13px;
+}
+
+.interview-controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+.interview-controls input {
+  padding: 6px 8px;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+}
